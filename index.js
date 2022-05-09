@@ -19,11 +19,19 @@ async function run() {
         await client.connect();
         const itemCollection = client.db('watchWarehouse').collection('item');
 
+
         app.get('/item', async (req, res) => {
             const query = {};
             const cursor = itemCollection.find(query);
             const items = await cursor.toArray();
             res.send(items);
+        })
+
+        app.post('/items', async (req, res) => {
+            const newItem = req.body;
+            console.log('adding new item', newItem);
+            const result = await itemCollection.insertOne(newItem)
+            res.send(result)
         })
     }
     finally {
