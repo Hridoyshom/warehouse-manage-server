@@ -21,7 +21,13 @@ async function run() {
         await client.connect();
         const itemCollection = client.db('watchWarehouse').collection('item');
 
-        app.get('/login')
+        app.post('/login', async (req, res) => {
+            const item = req.body;
+            const accessToken = jwt.sign(item, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '30d'
+            })
+            res.send({ accessToken });
+        })
 
         app.get('/item', async (req, res) => {
             const query = {};
